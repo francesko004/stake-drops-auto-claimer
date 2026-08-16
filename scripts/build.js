@@ -63,7 +63,6 @@ async function runBuild() {
     plugins: [
       viteStaticCopy({
         targets: [
-          { src: 'manifest.json', dest: '.' },
           { src: 'icon*.png', dest: 'icons' },
           { src: 'src/assets/*', dest: 'assets' },
           { src: 'test/fixtures/*', dest: 'test-fixtures' }
@@ -127,7 +126,50 @@ async function runBuild() {
     configFile: false
   });
 
-  console.log('✓ Build completed successfully! All content scripts are self-contained IIFE.');
+  // 4. Copy manifest.json and icons at the final stage
+  console.log('📋 Copying manifest.json and verifying extension structure...');
+  fs.copyFileSync(path.resolve(rootDir, 'manifest.json'), path.join(distDir, 'manifest.json'));
+
+  // Ensure icons directory exists
+  const iconsDir = path.join(distDir, 'icons');
+  if (!fs.existsSync(iconsDir)) {
+    fs.mkdirSync(iconsDir, { recursive: true });
+  }
+  for (const size of ['16', '48', '128']) {
+    const srcIcon = path.resolve(rootDir, `icon${size}.png`);
+    const destIcon = path.join(iconsDir, `icon${size}.png`);
+    if (fs.existsSync(srcIcon)) {
+      fs.copyFileSync(srcIcon, destIcon);
+    }
+  }
+
+  // Verify all required extension assets
+  const requiredFiles = [
+    'manifest.json',
+    'background/service-worker.js',
+    'content/stake-automator.js',
+    'content/stakecruncher-monitor.js',
+    'popup/popup.html',
+    'options/options.html',
+    'icons/icon16.png',
+    'icons/icon48.png',
+    'icons/icon128.png'
+  ];
+
+  let missing = 0;
+  for (const file of requiredFiles) {
+    const fullPath = path.join(distDir, file);
+    if (!fs.existsSync(fullPath)) {
+      console.error(`❌ Missing build file: dist/${file}`);
+      missing++;
+    }
+  }
+
+  if (missing > 0) {
+    throw new Error(`Build verification failed! ${missing} required files are missing from dist.`);
+  }
+
+  console.log('✨ Build completed & verified successfully! Ready to load unpacked in Chrome.');
 }
 
 runBuild().catch((err) => {
