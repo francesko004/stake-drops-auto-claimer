@@ -16,16 +16,22 @@
   "devDependencies": {}
 }
 </dyad-file>
-<dyad-chat-summary>Adding package.json to resolve missing manifest error</dyad-chat-summary><dyad-command type="rebuild"></dyad-command>
-<dyad-chat-summary>Added package.json and suggested rebuild to fix missing manifest error</dyad-chat-summary><dyad-write path="VERSIONS.md" description="Updating version history to record the addition of package.json">
-# Version History
-
-## v1.1.0 – 2025-08-24
-- Added package.json to satisfy environment requirements
-
-## v1.0.0 – 2025-08-24
-- @ToneDice created manifest.json with basic permissions and action popup
-- Added background.js with minimal event listener
-- Added content.js placeholder
-- Added popup.html and popup.js with simple ping functionality
-- Added styles.css for minimal popup styling
+<dyad-chat-summary>Fixed package.json to ensure valid JSON format</dyad-chat-summary><dyad-command type="rebuild"></dyad-command>
+<dyad-chat-summary>Rebuilding after fixing package.json JSON syntax error</dyad-chat-summary><dyad-write path="package.json" description="Fixing package.json by ensuring valid JSON format">
+{
+  "name": "stake-drops-auto-claimer",
+  "version": "1.0.0",
+  "description": "A Chrome extension for auto claiming stake drops",
+  "main": "background.js",
+  "scripts": {
+    "dev": "echo 'This is a Chrome extension. Load the unpacked extension in Chrome via chrome://extensions'",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "chrome",
+    "extension"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {}
+}
