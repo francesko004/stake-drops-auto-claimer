@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>StakeCruncher Bonus Codes - Test Fixture</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0d1117;
+      color: #c9d1d9;
+      padding: 20px;
+    }
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #30363d;
+    }
+    .auto-refreshing {
+      background: rgba(46, 160, 67, 0.15);
+      color: #3fb950;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    .controls-panel {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 14px;
+      margin-bottom: 20px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      background: #238636;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn:hover { background: #2ea043; }
+    .btn-secondary { background: #30363d; }
+    .btn-secondary:hover { background: #484f58; }
+    .bonus-codes-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .bonus-code-item {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .code-main { display: flex; align-items: center; gap: 12px; }
+    .bonus-code-value {
+      font-family: monospace;
+      font-size: 16px;
+      font-weight: bold;
+      color: #58a6ff;
+    }
+    .bonus-code-amount {
+      background: rgba(56, 139, 253, 0.15);
+      color: #58a6ff;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .code-meta { display: flex; gap: 16px; font-size: 12px; color: #8b949e; }
+  </style>
+</head>
+<body>
+  <div class="header-bar">
+    <h1>StakeCruncher Bonus Drops Feed</h1>
+    <span class="auto-refreshing">● Auto-refreshing</span>
+  </div>
+
+  <div class="controls-panel">
+    <button class="btn" id="btn-inject-fresh">Inject Fresh Code (stakecomfresh2026)</button>
+    <button class="btn btn-secondary" id="btn-inject-duplicate">Inject Duplicate (stakecombaseline1)</button>
+    <button class="btn btn-secondary" id="btn-inject-missing">Inject Code (Missing Amount/Limit)</button>
+    <button class="btn btn-secondary" id="btn-inject-batch">Inject Batch (3 Codes)</button>
+  </div>
+
+  <!-- Bonus Codes Container -->
+  <div class="bonus-codes-list" id="bonus-codes-list">
+    <!-- 30 Baseline items will be populated by script or hardcoded below -->
+  </div>
+
+  <script>
+    const container = document.getElementById('bonus-codes-list');
+
+    // Generate 30 baseline codes
+    for (let i = 1; i <= 30; i++) {
+      const item = document.createElement('div');
+      item.className = 'bonus-code-item';
+      item.innerHTML = `
+        <div class="code-main">
+          <span class="bonus-code-value">stakecombaseline${i}</span>
+          <span class="bonus-code-amount">$${(i * 1.25).toFixed(2)}</span>
+        </div>
+        <div class="code-meta">
+          <span class="bonus-code-req">Wager: $${i * 500} in 7 days</span>
+          <span class="bonus-code-limit">${i * 100} users</span>
+          <span class="bonus-code-time">${i * 3}m ago</span>
+        </div>
+      `;
+      container.appendChild(item);
+    }
+
+    function createCodeItem(code, amount, req, limit, time) {
+      const item = document.createElement('div');
+      item.className = 'bonus-code-item';
+      item.innerHTML = `
+        <div class="code-main">
+          <span class="bonus-code-value">${code}</span>
+          ${amount ? `<span class="bonus-code-amount">${amount}</span>` : ''}
+        </div>
+        <div class="code-meta">
+          ${req ? `<span class="bonus-code-req">${req}</span>` : ''}
+          ${limit ? `<span class="bonus-code-limit">${limit}</span>` : ''}
+          <span class="bonus-code-time">${time || 'Just now'}</span>
+        </div>
+      `;
+      return item;
+    }
+
+    // Auto-inject a fresh code after 2 seconds as specified in prompt
+    setTimeout(() => {
+      console.log('Automated 2-second fixture injection: NEW_TEST_CODE');
+      const testItem = createCodeItem('stakecom_auto_test_999', '$15.00', 'Wager: $4,000 in 7 days', '2500 users', 'Just now');
+      container.insertBefore(testItem, container.firstChild);
+    }, 2000);
+
+    // Interactive button triggers
+    document.getElementById('btn-inject-fresh').addEventListener('click', () => {
+      const randomId = Math.random().toString(36).substring(2, 8);
+      const item = createCodeItem(`stakecomfresh_${randomId}`, '$10.00', 'Wager: $2,500', '1000 users', 'Just now');
+      container.insertBefore(item, container.firstChild);
+    });
+
+    document.getElementById('btn-inject-duplicate').addEventListener('click', () => {
+      const item = createCodeItem('stakecombaseline1', '$5.00', 'Wager: $500', '100 users', 'Just now');
+      container.insertBefore(item, container.firstChild);
+    });
+
+    document.getElementById('btn-inject-missing').addEventListener('click', () => {
+      const randomId = Math.random().toString(36).substring(2, 8);
+      const item = createCodeItem(`stakecomsparse_${randomId}`, null, null, null, 'Just now');
+      container.insertBefore(item, container.firstChild);
+    });
+
+    document.getElementById('btn-inject-batch').addEventListener('click', () => {
+      for (let j = 1; j <= 3; j++) {
+        const randomId = Math.random().toString(36).substring(2, 6);
+        const item = createCodeItem(`stakecombatch_${randomId}_${j}`, `$${j * 5}.00`, `Wager: $${j * 1000}`, '500 users', 'Just now');
+        container.insertBefore(item, container.firstChild);
+      }
+    });
+  </script>
+</body>
+</html>

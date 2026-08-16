@@ -1,1 +1,5 @@
+node_modules/
 .dyad/
+*.log
+.DS_Store
+dist/src/

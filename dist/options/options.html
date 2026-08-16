@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stake Auto-Claim Settings</title>
+  <script type="module" crossorigin src="/options/options.js"></script>
+  <link rel="modulepreload" crossorigin href="/chunks/modulepreload-polyfill-B5Qt9EMX.js">
+  <link rel="modulepreload" crossorigin href="/chunks/constants--P4CpSWP.js">
+  <link rel="stylesheet" crossorigin href="/options/options.css">
+</head>
+<body>
+  <div class="options-container">
+    <header class="header">
+      <div class="brand">
+        <img src="/assets/icon-DM33XuM_.png" alt="Stake" class="brand-logo">
+        <div>
+          <h1>Stake Auto-Claim Preferences</h1>
+          <p class="subtitle">Configure automated claim policies, ultra-fast latency, dialog dismissal, and safety parameters.</p>
+        </div>
+      </div>
+      <div id="save-indicator" class="save-indicator hidden">Saved ✓</div>
+    </header>
+
+    <form id="settings-form">
+      <!-- Automation Policy Section -->
+      <section class="settings-group">
+        <h2 class="group-title">Automation & Lightning Speed</h2>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <label for="setting-autoclaim" class="setting-label">Automatic Claiming</label>
+            <p class="setting-desc">Automatically submit newly detected bonus codes to open Stake tab immediately.</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="setting-autoclaim">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <label for="setting-ultra-fast" class="setting-label">Turbo Fast-Claiming Mode (&lt; 50ms)</label>
+            <p class="setting-desc">Minimizes event dispatch intervals and DOM polling for instant drop redemption.</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="setting-ultra-fast">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <label for="setting-auto-dismiss" class="setting-label">Auto-Dismiss Claim Modals &amp; Toasts</label>
+            <p class="setting-desc">Automatically clicks "Dismiss" or "Close" after claim result to prepare UI for next drop.</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="setting-auto-dismiss">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <label for="setting-auto-offers" class="setting-label">Auto-Open Offers Modal</label>
+            <p class="setting-desc">Automatically navigate to Settings &gt; Offers if the redemption input is closed.</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="setting-auto-offers">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <label for="setting-cruncher" class="setting-label">StakeCruncher Live Monitoring</label>
+            <p class="setting-desc">Observe the live bonus code feed via MutationObserver on StakeCruncher.</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="setting-cruncher">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <label for="setting-pause-challenge" class="setting-label">Pause on Human Verification</label>
+            <p class="setting-desc">Immediately pause automation if CAPTCHA or Cloudflare challenge is encountered.</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="setting-pause-challenge">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <label for="setting-max-attempts" class="setting-label">Maximum Claim Attempts per Code</label>
+            <p class="setting-desc">Number of times the extension will attempt a unique code before marking failed.</p>
+          </div>
+          <select id="setting-max-attempts" class="input-select">
+            <option value="1">1 attempt (Recommended)</option>
+            <option value="2">2 attempts</option>
+            <option value="3">3 attempts</option>
+          </select>
+        </div>
+      </section>
+
+      <!-- Smart Threshold Filters -->
+      <section class="settings-group">
+        <h2 class="group-title">Smart Threshold Filters</h2>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <label for="setting-min-amount" class="setting-label">Minimum Bonus Value ($ USD)</label>
+            <p class="setting-desc">Skip drops with stated value below this amount. Set to 0 to claim all amounts.</p>
+          </div>
+          <input type="number" id="setting-min-amount" class="input-number" min="0" max="500" step="0.5" value="0" placeholder="0 = all">
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <label for="setting-max-wager" class="setting-label">Maximum 7-Day Wager Requirement ($ USD)</label>
+            <p class="setting-desc">Skip drops requiring more than this wagering requirement. Set to 0 for unlimited.</p>
+          </div>
+          <input type="number" id="setting-max-wager" class="input-number" min="0" max="500000" step="500" value="0" placeholder="0 = unlimited">
+        </div>
+      </section>
+
+      <!-- Notifications & Audio -->
+      <section class="settings-group">
+        <h2 class="group-title">Notifications & Feedback</h2>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <label for="setting-notifications" class="setting-label">Desktop Notifications</label>
+            <p class="setting-desc">Display rich desktop notifications for detected codes and claim results.</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="setting-notifications">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <label for="setting-sound" class="setting-label">Audio Chime Alerts</label>
+            <p class="setting-desc">Play a subtle audio tone when a new code is detected or successfully claimed.</p>
+          </div>
+          <div class="sound-controls">
+            <label class="switch">
+              <input type="checkbox" id="setting-sound">
+              <span class="slider"></span>
+            </label>
+            <button type="button" id="btn-test-sound" class="btn-test-sound" title="Test notification sound">Test 🔊</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Storage & Performance -->
+      <section class="settings-group">
+        <h2 class="group-title">Storage & Configuration</h2>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <label for="setting-history-size" class="setting-label">History Buffer Capacity</label>
+            <p class="setting-desc">Maximum number of recent codes and activity entries stored locally.</p>
+          </div>
+          <input type="number" id="setting-history-size" class="input-number" min="50" max="2000" step="50" value="500">
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <label for="setting-domains" class="setting-label">Allowed Stake Domains</label>
+            <p class="setting-desc">Comma-separated list of recognized Stake mirrors and regional domains.</p>
+          </div>
+          <input type="text" id="setting-domains" class="input-text" placeholder="stake.com, stake.us, stake.bet, stake.games">
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <label for="setting-debug" class="setting-label">Verbose Debug Logging</label>
+            <p class="setting-desc">Output detailed diagnostic logs into the developer console.</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="setting-debug">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </section>
+
+      <div class="actions-row">
+        <button type="button" id="btn-reset-defaults" class="btn-reset">Restore Defaults</button>
+        <button type="submit" id="btn-save-settings" class="btn-save">Save Settings</button>
+      </div>
+    </form>
+  </div>
+
+</body>
+</html>

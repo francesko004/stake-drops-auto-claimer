@@ -1,37 +1,35 @@
 {
-  "name": "stake-drops-auto-claimer",
-  "version": "1.0.0",
-  "description": "A Chrome extension for auto claiming stake drops",
-  "main": "background.js",
+  "name": "stake-auto-claim",
+  "version": "1.1.0",
+  "description": "Production-ready Manifest V3 Chrome Extension for automatic bonus drop claiming on Stake via StakeCruncher monitoring",
+  "type": "module",
   "scripts": {
-    "dev": "echo 'This is a Chrome extension. Load the unpacked extension in Chrome via chrome://extensions'",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "node scripts/build.js",
+    "build": "node scripts/build.js",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "tsc --noEmit",
+    "package": "node scripts/package.js"
   },
   "keywords": [
-    "chrome",
-    "extension"
+    "chrome-extension",
+    "manifest-v3",
+    "stake",
+    "stakecruncher",
+    "auto-claim",
+    "typescript"
   ],
   "author": "",
-  "license": "ISC",
-  "devDependencies": {}
-}
-</dyad-file>
-<dyad-chat-summary>Fixed package.json to ensure valid JSON format</dyad-chat-summary><dyad-command type="rebuild"></dyad-command>
-<dyad-chat-summary>Rebuilding after fixing package.json JSON syntax error</dyad-chat-summary><dyad-write path="package.json" description="Fixing package.json by ensuring valid JSON format">
-{
-  "name": "stake-drops-auto-claimer",
-  "version": "1.0.0",
-  "description": "A Chrome extension for auto claiming stake drops",
-  "main": "background.js",
-  "scripts": {
-    "dev": "echo 'This is a Chrome extension. Load the unpacked extension in Chrome via chrome://extensions'",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [
-    "chrome",
-    "extension"
-  ],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {}
+  "license": "MIT",
+  "devDependencies": {
+    "@types/chrome": "^0.0.280",
+    "@types/node": "^22.10.1",
+    "archiver": "^7.0.1",
+    "happy-dom": "^15.11.7",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.3",
+    "vite-plugin-static-copy": "^2.2.0",
+    "vitest": "^2.1.8"
+  }
 }

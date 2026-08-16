@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stake Auto-Claim</title>
+  <script type="module" crossorigin src="/popup/popup.js"></script>
+  <link rel="modulepreload" crossorigin href="/chunks/modulepreload-polyfill-B5Qt9EMX.js">
+  <link rel="modulepreload" crossorigin href="/chunks/constants--P4CpSWP.js">
+  <link rel="stylesheet" crossorigin href="/popup/popup.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Top Header -->
+    <header class="header">
+      <div class="brand">
+        <img src="/assets/icon-DM33XuM_.png" alt="Stake" class="brand-logo" id="brand-logo">
+        <div class="brand-text">
+          <div class="brand-title-row">
+            <h1 class="brand-title">STAKE AUTO-CLAIM</h1>
+            <span class="brand-version">v1.2 TURBO</span>
+          </div>
+          <span class="brand-subtitle">Ultra-Fast Drop Claimer</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="btn-dismiss-dialog" class="icon-btn" title="Dismiss Stake Dialogs" aria-label="Dismiss Stake Dialogs">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+        <button id="btn-open-offers" class="icon-btn" title="Open Stake Offers Tab" aria-label="Open Stake Offers">
+          🎁
+        </button>
+        <button id="btn-options" class="icon-btn" title="Open Settings" aria-label="Open Settings">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Total Earnings Banner -->
+    <div class="earnings-banner">
+      <div class="earnings-info">
+        <span class="earnings-label">TOTAL EARNINGS CLAIMED</span>
+        <span id="total-earnings-val" class="earnings-amount">$0.00</span>
+      </div>
+      <div class="earnings-badges-wrap">
+        <div class="turbo-badge">⚡ FAST-CLAIM</div>
+        <div class="earnings-badge">LIVE 💰</div>
+      </div>
+    </div>
+
+    <!-- Security Challenge Alert Banner (Conditional) -->
+    <div id="challenge-banner" class="alert-banner hidden">
+      <div class="alert-content">
+        <span class="alert-icon">⚠</span>
+        <div class="alert-text">
+          <strong>HUMAN VERIFICATION REQUIRED</strong>
+          <p>Please solve verification on Stake, then resume.</p>
+        </div>
+      </div>
+      <button id="btn-resume-challenge" class="btn-resume">RESUME</button>
+    </div>
+
+    <!-- Status & Connections Card -->
+    <section class="card status-card">
+      <div class="status-main">
+        <span class="status-label">ENGINE STATUS</span>
+        <div class="status-indicator-wrap">
+          <span id="status-dot" class="status-dot off"></span>
+          <span id="status-text" class="status-text">OFF</span>
+        </div>
+      </div>
+      <div class="connections-row">
+        <div class="conn-pill" id="conn-stake">
+          <span class="conn-dot"></span>
+          <span class="conn-title">Stake:</span>
+          <span class="conn-val" id="conn-stake-val">CHECKING...</span>
+        </div>
+        <div class="conn-pill" id="conn-cruncher">
+          <span class="conn-dot"></span>
+          <span class="conn-title">StakeCruncher:</span>
+          <span class="conn-val" id="conn-cruncher-val">CHECKING...</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Card: Latest Detected Code -->
+    <section class="card code-card" id="card-latest-code">
+      <div class="card-header">
+        <span class="card-title">LATEST BONUS DROP</span>
+        <span id="latest-time-ago" class="code-time-ago">No codes detected</span>
+      </div>
+      <div class="code-display-box">
+        <div class="code-primary">
+          <span id="latest-code-text" class="code-string">--</span>
+          <button id="btn-copy-code" class="copy-btn" title="Copy code" style="display: none;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+          </button>
+        </div>
+        <div class="code-badges">
+          <span id="latest-amount-badge" class="badge badge-amount hidden">$0.00</span>
+          <span id="latest-status-badge" class="badge badge-status badge-idle">IDLE</span>
+        </div>
+      </div>
+      <div id="latest-req-row" class="code-details-row hidden">
+        <span class="details-label">Wager Req:</span>
+        <span id="latest-req-text" class="details-value">--</span>
+      </div>
+    </section>
+
+    <!-- Quick Manual Claim / Test Box -->
+    <section class="card manual-claim-card">
+      <div class="manual-claim-header">
+        <span class="card-title">MANUAL CLAIM / FAST TESTER</span>
+      </div>
+      <form id="form-manual-claim" class="manual-claim-form">
+        <input type="text" id="input-manual-code" class="input-manual-code" placeholder="Paste custom Stake bonus code..." autocomplete="off" spellcheck="false">
+        <button type="submit" id="btn-manual-submit" class="btn-manual-submit">Claim</button>
+      </form>
+    </section>
+
+    <!-- Live Statistics Grid -->
+    <section class="stats-section">
+      <div class="stats-header">
+        <span class="section-title">SESSION METRICS</span>
+        <button id="btn-clear-stats" class="text-btn">Reset</button>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <span class="stat-value" id="stat-detected">0</span>
+          <span class="stat-label">Detected</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-value" id="stat-attempted">0</span>
+          <span class="stat-label">Attempted</span>
+        </div>
+        <div class="stat-box stat-success">
+          <span class="stat-value" id="stat-successful">0</span>
+          <span class="stat-label">Claimed</span>
+        </div>
+        <div class="stat-box stat-warning">
+          <span class="stat-value" id="stat-expired">0</span>
+          <span class="stat-label">Expired</span>
+        </div>
+        <div class="stat-box stat-info">
+          <span class="stat-value" id="stat-claimed">0</span>
+          <span class="stat-label">Already Had</span>
+        </div>
+        <div class="stat-box stat-danger">
+          <span class="stat-value" id="stat-failed">0</span>
+          <span class="stat-label">Failed</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Live Activity Feed -->
+    <section class="activity-section">
+      <div class="activity-header">
+        <span class="section-title">LIVE ACTIVITY STREAM</span>
+        <span class="live-pulse"></span>
+      </div>
+      <div class="activity-list" id="activity-list">
+        <div class="activity-empty">No activity recorded yet</div>
+      </div>
+    </section>
+
+    <!-- Action Controls Footer -->
+    <footer class="footer-controls">
+      <button id="btn-toggle-active" class="btn-primary">
+        <span class="btn-icon">⚡</span>
+        <span id="btn-toggle-text">ACTIVATE AUTO-CLAIM</span>
+      </button>
+      <div class="secondary-controls">
+        <button id="btn-pause" class="btn-secondary">PAUSE</button>
+        <button id="btn-clear-history" class="btn-secondary">CLEAR LOGS</button>
+      </div>
+    </footer>
+  </div>
+
+</body>
+</html>
